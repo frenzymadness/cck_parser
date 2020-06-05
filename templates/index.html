@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ČČK pomocník s evidencí dárců</title>
+    <style>
+        pre {
+            font-family:sans;
+            width:400px;
+        }
+
+        mark.deleted {
+            background: #ff9999;
+        }
+        mark.issue {
+            background: #ffe16d;
+        }
+    </style>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+    <div class="w3-container w3-teal">
+        <h1>Pomocník se zpracováním informací do evidence dárců</h1>
+    </div>
+    <div class="w3-container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="w3-panel w3-red">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div class="w3-container">
+        <form class="w3-container" action="/" method="post" enctype="multipart/form-data">
+            <label for="source">Soubor od odběrného místa</label>
+            <input class="w3-input w3-border-0" type="file" name="source" id="source">
+            <input class="w3-btn w3-blue" type="submit" value="Zpracovat">
+        </form>
+    </div>
+    {% if result %}
+    <div class="w3-container">
+        <h2>Originál</h2>
+        <pre contenteditable="true">
+{% for line in original %}
+{% if loop.index in deleted -%}
+<mark class="deleted">{{ line -}}</mark>
+{%- else -%}
+{{ line -}}
+{% endif -%}
+{%- endfor %}
+        </pre>
+    </div>
+    <!-- <div class="w3-container">
+        <h2>Chyby</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Řádek</th>
+                    <th>Chyba</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row, message in errors.items() %}
+                <tr>
+                    <td>{{ row }}</td>
+                    <td>{{ message }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> -->
+    <div class="w3-container">
+        <h2>Výsledek</h2>
+        <pre contenteditable="true">
+{% for line in result %}
+{% if loop.index in errors.keys() -%}
+<mark class="issue">{{ line -}}</mark>
+{%- else -%}
+{{ line -}}
+{% endif -%}
+{%- endfor %}
+        </pre>
+    </div>
+    {% endif %}
+</body>
+</html>
