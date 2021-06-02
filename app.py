@@ -36,7 +36,7 @@ def index():
             else:
                 result.append(";".join(parts))
                 if ";;" in result[-1]:
-                    result[-1].replace(";;", ";")
+                    result[-1] = result[-1].replace(";;", ";")
 
         return render_template("index.html", original=lines, result=result,
                                errors=errors, deleted=deleted)
